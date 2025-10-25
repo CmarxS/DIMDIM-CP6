@@ -52,7 +52,7 @@ src/
 Edite o arquivo `application.properties`:
 
 ```properties
-spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=financeiro_db;encrypt=true;trustServerCertificate=true
+spring.datasource.url=sua_url_do_sql_server
 spring.datasource.username=seu_usuario
 spring.datasource.password=sua_senha
 ```
@@ -70,8 +70,6 @@ CREATE DATABASE financeiro_db;
 ```bash
 mvn spring-boot:run
 ```
-
-A API estará disponível em: `http://localhost:8080`
 
 ## 📚 Endpoints da API
 
@@ -185,58 +183,6 @@ DELETE /api/transacoes/{id}
 
 ```bash
 mvn test
-```
-
-Os testes utilizam banco H2 em memória automaticamente.
-
-## ☁️ Deploy no Azure
-
-### 1. Criar SQL Database no Azure
-
-```bash
-# Criar grupo de recursos
-az group create --name rg-financeiro --location brazilsouth
-
-# Criar SQL Server
-az sql server create \
-  --name srv-financeiro \
-  --resource-group rg-financeiro \
-  --location brazilsouth \
-  --admin-user adminuser \
-  --admin-password SuaSenha123!
-
-# Criar banco de dados
-az sql db create \
-  --name financeiro-db \
-  --server srv-financeiro \
-  --resource-group rg-financeiro \
-  --service-objective S0
-```
-
-### 2. Atualizar application.properties para Azure
-
-```properties
-spring.datasource.url=jdbc:sqlserver://srv-financeiro.database.windows.net:1433;database=financeiro-db;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
-spring.datasource.username=adminuser@srv-financeiro
-spring.datasource.password=SuaSenha123!
-```
-
-### 3. Deploy no App Service
-
-```bash
-# Criar App Service
-az webapp create \
-  --resource-group rg-financeiro \
-  --plan asp-financeiro \
-  --name app-financeiro-api \
-  --runtime "JAVA:21-java21"
-
-# Deploy do JAR
-mvn clean package
-az webapp deploy \
-  --resource-group rg-financeiro \
-  --name app-financeiro-api \
-  --src-path target/CP6-Devops-0.0.1-SNAPSHOT.jar
 ```
 
 ## 📝 Exemplos de Uso com cURL
